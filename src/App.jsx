@@ -16,6 +16,16 @@ function App() {
   const [weight, setWeight] = useState(70) // Default weight in kg (40-120)
   const [skinColor, setSkinColor] = useState('#FDBCB4') // Default skin color (Light)
   const [hairType, setHairType] = useState('short') // Default hair type: 'short', 'medium', 'long', 'curly', 'bald'
+  
+  // Clothing state
+  const [selectedClothingCategory, setSelectedClothingCategory] = useState('shirts')
+  const [clothing, setClothing] = useState({
+    shirts: null,
+    pants: null,
+    shorts: null,
+    shoes: null,
+    jackets: null,
+  })
 
   // Dynamic model path based on gender
   // Place your models in: public/models/
@@ -63,6 +73,9 @@ function App() {
       setWeight(result.avatar.weight)
       setSkinColor(result.avatar.skinColor)
       setHairType(result.avatar.hairType)
+      if (result.avatar.clothing) {
+        setClothing(result.avatar.clothing)
+      }
       setSaveMessage('Avatar loaded successfully!')
       setTimeout(() => setSaveMessage(''), 3000)
     } else {
@@ -95,6 +108,7 @@ function App() {
       weight,
       skinColor,
       hairType,
+      clothing,
       bmi: parseFloat(bmi),
     })
 
@@ -162,11 +176,15 @@ function App() {
             weight={weight}
             skinColor={skinColor}
             hairType={hairType}
+            selectedClothingCategory={selectedClothingCategory}
+            clothing={clothing}
             onGenderChange={setGender}
             onHeightChange={setHeight}
             onWeightChange={setWeight}
             onSkinColorChange={setSkinColor}
             onHairTypeChange={setHairType}
+            onClothingCategoryChange={setSelectedClothingCategory}
+            onClothingChange={setClothing}
             onSave={saveAvatar}
             onLoad={loadAvatar}
             isAuthenticated={isAuthenticated}

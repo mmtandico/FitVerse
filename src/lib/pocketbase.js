@@ -76,6 +76,7 @@ export const avatarService = {
         weight: avatarData.weight,
         skinColor: avatarData.skinColor,
         hairType: avatarData.hairType,
+        clothing: avatarData.clothing || null,
         bmi: avatarData.bmi,
       }
 
@@ -99,10 +100,12 @@ export const avatarService = {
         try {
           const data = {
             user: pb.authStore.model.id,
+            gender: avatarData.gender || 'male',
             height: avatarData.height,
             weight: avatarData.weight,
             skinColor: avatarData.skinColor,
             hairType: avatarData.hairType,
+            clothing: avatarData.clothing || null,
             bmi: avatarData.bmi,
           }
           const record = await pb.collection('avatars').create(data)
@@ -134,6 +137,7 @@ export const avatarService = {
           weight: record.weight,
           skinColor: record.skinColor,
           hairType: record.hairType,
+          clothing: record.clothing || null,
           bmi: record.bmi,
         },
       }

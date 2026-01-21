@@ -4,11 +4,15 @@ function AvatarControls({
   weight,
   skinColor,
   hairType,
+  selectedClothingCategory,
+  clothing,
   onGenderChange,
   onHeightChange,
   onWeightChange,
   onSkinColorChange,
   onHairTypeChange,
+  onClothingCategoryChange,
+  onClothingChange,
   onSave,
   onLoad,
   isAuthenticated,
@@ -23,6 +27,61 @@ function AvatarControls({
   ]
 
   const hairTypes = ['short', 'medium', 'long', 'curly', 'bald']
+
+  // Clothing categories and items
+  const clothingCategories = [
+    { id: 'shirts', name: 'Shirts', icon: '👕' },
+    { id: 'pants', name: 'Pants', icon: '👖' },
+    { id: 'shorts', name: 'Shorts', icon: '🩳' },
+    { id: 'shoes', name: 'Shoes', icon: '👟' },
+    { id: 'jackets', name: 'Jackets', icon: '🧥' },
+  ]
+
+  // Sample clothing items for each category (you can expand this later)
+  const clothingItems = {
+    shirts: [
+      { id: 'none', name: 'None' },
+      { id: 'tshirt_white', name: 'White T-Shirt' },
+      { id: 'tshirt_black', name: 'Black T-Shirt' },
+      { id: 'polo_blue', name: 'Blue Polo' },
+      { id: 'polo_red', name: 'Red Polo' },
+      { id: 'dress_shirt', name: 'Dress Shirt' },
+    ],
+    pants: [
+      { id: 'none', name: 'None' },
+      { id: 'jeans_blue', name: 'Blue Jeans' },
+      { id: 'jeans_black', name: 'Black Jeans' },
+      { id: 'chinos_khaki', name: 'Khaki Chinos' },
+      { id: 'sweatpants', name: 'Sweatpants' },
+    ],
+    shorts: [
+      { id: 'none', name: 'None' },
+      { id: 'cargo_shorts', name: 'Cargo Shorts' },
+      { id: 'athletic_shorts', name: 'Athletic Shorts' },
+      { id: 'denim_shorts', name: 'Denim Shorts' },
+    ],
+    shoes: [
+      { id: 'none', name: 'None' },
+      { id: 'sneakers_white', name: 'White Sneakers' },
+      { id: 'sneakers_black', name: 'Black Sneakers' },
+      { id: 'boots', name: 'Boots' },
+      { id: 'sandals', name: 'Sandals' },
+    ],
+    jackets: [
+      { id: 'none', name: 'None' },
+      { id: 'hoodie', name: 'Hoodie' },
+      { id: 'denim_jacket', name: 'Denim Jacket' },
+      { id: 'leather_jacket', name: 'Leather Jacket' },
+      { id: 'windbreaker', name: 'Windbreaker' },
+    ],
+  }
+
+  const handleClothingItemSelect = (itemId) => {
+    onClothingChange({
+      ...clothing,
+      [selectedClothingCategory]: itemId === 'none' ? null : itemId,
+    })
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-[#e5e7eb] p-8 animate-fade-in">
@@ -152,6 +211,55 @@ function AvatarControls({
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Clothing Category Selection */}
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#1a1a1a] uppercase tracking-wide mb-4">
+          Clothing
+        </label>
+        
+        {/* Category Buttons */}
+        <div className="grid grid-cols-5 gap-2 mb-4">
+          {clothingCategories.map((category) => (
+            <button
+              key={category.id}
+              onClick={() => onClothingCategoryChange(category.id)}
+              className={`px-3 py-3 rounded-xl border-2 font-medium text-xs transition-all duration-200 flex flex-col items-center gap-1 ${selectedClothingCategory === category.id
+                ? 'border-[#dc2626] bg-[#dc2626] text-white shadow-sm'
+                : 'border-[#e5e7eb] bg-white text-[#1a1a1a] hover:border-[#dc2626] hover:bg-[#fee2e2]'
+                }`}
+            >
+              <span className="text-lg">{category.icon}</span>
+              <span>{category.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Items for Selected Category */}
+        <div className="bg-[#f9fafb] rounded-xl p-4 border border-[#e5e7eb]">
+          <p className="text-xs text-[#6b7280] font-medium mb-3 uppercase tracking-wide">
+            {clothingCategories.find(c => c.id === selectedClothingCategory)?.name} Options
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {clothingItems[selectedClothingCategory]?.map((item) => {
+              const isSelected = clothing[selectedClothingCategory] === item.id || 
+                                (clothing[selectedClothingCategory] === null && item.id === 'none')
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleClothingItemSelect(item.id)}
+                  className={`px-4 py-2.5 rounded-lg border-2 font-medium text-sm transition-all duration-200 ${isSelected
+                    ? 'border-[#dc2626] bg-[#dc2626] text-white shadow-sm'
+                    : 'border-[#e5e7eb] bg-white text-[#1a1a1a] hover:border-[#dc2626] hover:bg-[#fee2e2]'
+                    }`}
+                >
+                  {item.name}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
